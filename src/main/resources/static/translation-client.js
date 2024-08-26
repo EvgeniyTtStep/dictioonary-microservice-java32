@@ -40,6 +40,27 @@ $(document).ready(function() {
                     append("Wrong!");
                 }}
         });
-        updateWord();
+        updateWord()
+        updateStats(userNickname);
     });
 });
+
+function updateStats(nickname) {
+    $.ajax({
+        url: "http://localhost:8080/results?nickname="
+            + nickname
+    }).then(function(data) {
+        $('#stats-body').empty();
+        data.forEach(function(row) {
+            $('#stats-body').append('<tr><td>' + row.id +
+                '</td>' +
+                '<td>' + row.dictionary.word +
+                '</td>' +
+                '<td>' + row.resultAttempt +
+                '</td>' +
+                '<td>' +
+                (row.correct === true ? 'YES' : 'NO')
+                + '</td></tr>');
+        });
+    });
+}

@@ -10,4 +10,5 @@ public class DictioonaryMicroserviceJava32Application {
         SpringApplication.run(DictioonaryMicroserviceJava32Application.class, args);
     }
 
+
 }

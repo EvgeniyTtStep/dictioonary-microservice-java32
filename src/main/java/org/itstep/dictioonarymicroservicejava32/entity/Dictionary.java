@@ -14,7 +14,7 @@ import lombok.*;
 public class Dictionary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DICTIONARY_ID")
+    @Column(name = "dictionary_id")
     private Long id;
     private final String word;
     private final String translate;

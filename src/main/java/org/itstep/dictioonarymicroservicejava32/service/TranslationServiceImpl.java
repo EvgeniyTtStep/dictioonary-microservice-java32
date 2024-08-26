@@ -3,6 +3,8 @@ package org.itstep.dictioonarymicroservicejava32.service;
 import org.itstep.dictioonarymicroservicejava32.entity.Dictionary;
 import org.itstep.dictioonarymicroservicejava32.entity.TranslationResultAttempt;
 import org.itstep.dictioonarymicroservicejava32.entity.User;
+import org.itstep.dictioonarymicroservicejava32.event.EventDispatcher;
+import org.itstep.dictioonarymicroservicejava32.event.TranslationCompletedEvent;
 import org.itstep.dictioonarymicroservicejava32.repository.DictionaryRepository;
 import org.itstep.dictioonarymicroservicejava32.repository.TranslationResultAttemptRepository;
 import org.itstep.dictioonarymicroservicejava32.repository.UserRepository;
@@ -27,6 +29,9 @@ public class TranslationServiceImpl implements TranslationService {
 
     @Autowired
     TranslationResultAttemptRepository attemptRepository;
+
+    @Autowired
+    EventDispatcher eventDispatcher;
 
     @Override
     public String getRandom() {
@@ -56,7 +61,26 @@ public class TranslationServiceImpl implements TranslationService {
 
         attemptRepository.save(checkedAttempt);
 
+        eventDispatcher.send(
+                new TranslationCompletedEvent(
+                        checkedAttempt.getId(),
+                        checkedAttempt.getUser().getId(),
+                        checkedAttempt.isCorrect()));
+
+
         return isCorrect;
+    }
+
+    @Override
+    public TranslationResultAttempt getResultById(final Long resultId) {
+        return attemptRepository.findById(resultId).
+                orElse(null);
+    }
+
+    @Override
+    public List<TranslationResultAttempt> getStatsForUser(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElse(null);
+        return attemptRepository.findByUser(user);
     }
 
 

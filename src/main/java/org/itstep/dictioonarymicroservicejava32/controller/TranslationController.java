@@ -5,10 +5,9 @@ import org.itstep.dictioonarymicroservicejava32.entity.TranslationResultAttempt;
 import org.itstep.dictioonarymicroservicejava32.service.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class TranslationController {
@@ -22,6 +21,12 @@ public class TranslationController {
         }
 
 
+    @GetMapping("/results")
+    ResponseEntity<List<TranslationResultAttempt>> getStatistics(@RequestParam("nickname")
+                  String nickname) {
+        return ResponseEntity.ok(translationService.getStatsForUser(nickname));
+    }
+
 
         @PostMapping("/results")
         ResponseEntity<TranslationResultAttempt> postResult(@RequestBody TranslationResultAttempt translationResultAttempt) {
@@ -31,10 +36,10 @@ public class TranslationController {
             TranslationResultAttempt attemptCopy = new TranslationResultAttempt(
                     isCorrect,
                     translationResultAttempt.getResultAttempt(),
-                    translationResultAttempt.
-                    getDictionary(),
-                    translationResultAttempt.getUser()
-                    );
+                    translationResultAttempt.getDictionary(),
+                    translationResultAttempt.getUser());
+
+            System.out.println("attemptCopy = " + attemptCopy);
 
             return ResponseEntity.ok(attemptCopy);
 

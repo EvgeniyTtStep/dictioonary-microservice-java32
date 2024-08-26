@@ -4,6 +4,9 @@ package org.itstep.dictioonarymicroservicejava32.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+
+
 @AllArgsConstructor
 @Getter
 @Setter
